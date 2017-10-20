@@ -7,6 +7,7 @@ public class CrosshairScript : MonoBehaviour {
 	private Rect position;
 	public Texture2D crosshairTexture;
 	public Rigidbody bulletRigidbody;
+	public Camera followCam;
 
 	// Use this for initialization
 	void Start () {
@@ -39,13 +40,10 @@ public class CrosshairScript : MonoBehaviour {
 		Vector3 crosshairLocation = Input.mousePosition;
 		// This gives pixel coordinates, not in-world coordinates
 		// need to try using Camera.main.ScreenPointToRay instead
-		Ray ray = Camera.main.ScreenPointToRay(crosshairLocation);
-		Debug.DrawRay(ray.origin, ray.direction * 10, Color.yellow);
+		Ray ray = followCam.ScreenPointToRay(crosshairLocation);
 
 		if(Physics.Raycast(ray, out hit, Mathf.Infinity, surfaceLayer)) {
 			Rigidbody bulletClone = (Rigidbody)Instantiate (bulletRigidbody, hit.point, Random.rotation);
 		}
-		print ("screenPosition.x: " + position.x);
-		print ("screenPosition.y: " + position.y);
 	}
 }

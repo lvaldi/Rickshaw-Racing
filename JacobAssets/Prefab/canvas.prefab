@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 114450495868236198}
   - component: {fileID: 114015963936392598}
   m_Layer: 5
-  m_Name: New Prefab
+  m_Name: canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

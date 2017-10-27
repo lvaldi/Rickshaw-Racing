@@ -8,6 +8,8 @@ public class CrosshairScript : MonoBehaviour {
 	public Texture2D crosshairTexture;
 	public Rigidbody bulletRigidbody;
 	public Camera followCam;
+	public Transform car;
+	public float force = 0.0f;
 
 	// Use this for initialization
 	void Start () {
@@ -38,12 +40,24 @@ public class CrosshairScript : MonoBehaviour {
 		RaycastHit hit;
 		int surfaceLayer = 1 << 8;
 		Vector3 crosshairLocation = Input.mousePosition;
+		//crosshairLocation.y = car.position.y;
 		// This gives pixel coordinates, not in-world coordinates
 		// need to try using Camera.main.ScreenPointToRay instead
 		Ray ray = followCam.ScreenPointToRay(crosshairLocation);
 
 		if(Physics.Raycast(ray, out hit, Mathf.Infinity, surfaceLayer)) {
-			Rigidbody bulletClone = (Rigidbody)Instantiate (bulletRigidbody, hit.point, Random.rotation);
+			Vector3 destination = hit.point;
+			destination.y = car.position.y;
+			createBullet (hit.point);
 		}
+	}
+
+	void createBullet(Vector3 crosshairLoc) {
+		Vector3 bulletDir = crosshairLoc - car.position;
+		bulletDir = bulletDir.normalized;
+		bulletDir.y = 0;
+		Vector3 bulletSpawnLoc = car.position + bulletDir * 2.0f;
+		Rigidbody bulletClone = (Rigidbody)Instantiate (bulletRigidbody, bulletSpawnLoc, Random.rotation);
+		bulletClone.velocity = bulletDir * force;
 	}
 }

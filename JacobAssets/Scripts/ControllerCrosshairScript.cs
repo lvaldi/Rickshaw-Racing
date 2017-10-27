@@ -64,7 +64,18 @@ public class ControllerCrosshairScript : MonoBehaviour {
 		Ray ray = followCam.ScreenPointToRay(crosshairLocation);
 
 		if(Physics.Raycast(ray, out hit, Mathf.Infinity, surfaceLayer)) {
-			Rigidbody bulletClone = (Rigidbody)Instantiate (bulletRigidbody, hit.point, Random.rotation);
+			Vector3 destination = hit.point;
+			destination.y = car.position.y;
+			createBullet (hit.point);
 		}
+	}
+
+	void createBullet(Vector3 crosshairLoc) {
+		Vector3 bulletDir = crosshairLoc - car.position;
+		bulletDir = bulletDir.normalized;
+		bulletDir.y = 0;
+		Vector3 bulletSpawnLoc = car.position + bulletDir * 2.0f;
+		Rigidbody bulletClone = (Rigidbody)Instantiate (bulletRigidbody, bulletSpawnLoc, Random.rotation);
+		bulletClone.velocity = bulletDir * force;
 	}
 }
